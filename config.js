@@ -12,11 +12,12 @@ module.exports = {
     shortcut: {
         dev: "F12",
         paste: "CommandOrControl",
+        show: "CommandOrControl+Shift+V",
         esc: "Esc"
     },
     maxLength: 9,
     messageFlag: {
         clipboardMessage: "CLIPBOARD_MESSAGE"
     },
-    listenClipboardInterval: 500
+    listenClipboardInterval: 200
 };

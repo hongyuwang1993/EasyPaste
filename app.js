@@ -55,7 +55,7 @@ function registerShortcut() {
         });
     }
 
-    doRegister(`${Config.shortcut.paste}+P`, () => {
+    doRegister(Config.shortcut.show, () => {
         if (!mainWindow.isVisible()) {
             showMainWindow();
         }
@@ -68,7 +68,7 @@ function registerShortcut() {
 function listenClipboard() {
     // 先读取当前剪切板中的文字内容
     let currentText = clipboard.readText();
-    if (!currentText) {
+    if (!currentText || currentText === "\n") {
         return;
     }
     insertPasteText(currentText);
@@ -101,6 +101,11 @@ function createMainWindow() {
         title: Config.title,
         show: false
     });
+
+    app.dock.hide();
+    win.setAlwaysOnTop(true, "floating");
+    win.setVisibleOnAllWorkspaces(true);
+    win.setFullScreenable(false);
 
     win.loadURL(`file://${__dirname}/index.html`);
     //给窗口绑定各种事件
@@ -179,13 +184,13 @@ app.on('window-all-closed', () => {
     app.quit();
 });
 
-app.on('activate', () => {
-    if (!mainWindow) {
-        mainWindow = createMainWindow();
-    } else {
-        showMainWindow();
-    }
-});
+// app.on('activate', () => {
+//     if (!mainWindow) {
+//         mainWindow = createMainWindow();
+//     } else {
+//         showMainWindow();
+//     }
+// });
 
 ipcMain.on(Config.messageFlag.clipboardMessage, (event, arg) => {
     mainWindow.hide();
@@ -206,4 +211,6 @@ app.on('ready', () => {
     //注册键盘快捷键
     registerShortcut();
 });
+
+
 
